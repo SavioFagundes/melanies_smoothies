@@ -44,19 +44,7 @@ ingredients_list = st.multiselect(
 )
 
 # -----------------------------------------
-# FRUIT NUTRITION INFORMATION
-# Etapa do exercício Snowflake
-# -----------------------------------------
-
-smoothiefroot_response = requests.get(
-    "https://my.smoothiefroot.com/api/fruit/watermelon"
-)
-
-# st.text(smoothiefroot_response.json())
-sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
-
-# -----------------------------------------
-# PREPARA OS INGREDIENTES DO PEDIDO
+# PROCESSA OS INGREDIENTES
 # -----------------------------------------
 
 if ingredients_list:
@@ -64,7 +52,21 @@ if ingredients_list:
     ingredients_string = ""
 
     for fruit_chosen in ingredients_list:
+
         ingredients_string += fruit_chosen + " "
+
+        # -----------------------------------------
+        # FRUIT NUTRITION INFORMATION
+        # -----------------------------------------
+
+        smoothiefroot_response = requests.get(
+            "https://my.smoothiefroot.com/api/fruit/watermelon"
+        )
+
+        sf_df = st.dataframe(
+            data=smoothiefroot_response.json(),
+            use_container_width=True
+        )
 
     # -----------------------------------------
     # ENVIAR PEDIDO
@@ -106,8 +108,5 @@ if ingredients_list:
 
             except Exception as e:
 
-                st.error(
-                    "Something went wrong."
-                )
-
+                st.error("Something went wrong.")
                 st.write(e)
